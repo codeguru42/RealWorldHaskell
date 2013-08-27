@@ -14,6 +14,9 @@ renderJValue (JString str) = string str
 data Doc = ToBeDefined
     deriving (Show)
 
+(<>) :: Doc -> Doc -> Doc
+a <> b = undefined
+
 hcat :: [Doc] -> Doc
 hcat xs = undefined
 
@@ -21,7 +24,10 @@ string :: String -> Doc
 string = enclose '"' '"' . hcat . map oneChar
 
 enclose :: Char -> Char -> Doc -> Doc
-enclose left right x = undefined
+enclose left right x = char left <> x <> char right
+
+char :: Char -> Doc
+char c = undefined
 
 oneChar :: Char -> Doc
 oneChar c = undefined
