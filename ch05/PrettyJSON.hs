@@ -3,6 +3,7 @@ module PrettyJSON where
 import SimpleJSON
 
 import Data.List (intercalate)
+import Numeric   (showHex)
 
 renderJValue :: JValue -> Doc
 renderJValue (JBool True)  = text "true"
@@ -35,6 +36,12 @@ oneChar c = case lookup c simpleEscapes of
 
 char :: Char -> Doc
 char c = undefined
+
+smallHex :: Int -> Doc
+smallHex x = text "\\u"
+          <> text (replicate (4 - length h) '0')
+          <> text h
+    where h = showHex x ""
 
 simpleEscapes :: [(Char, String)]
 simpleEscapes = zipWith ch "\b\n\f\r\t\\\"/" "bnfrt\\\"/"
