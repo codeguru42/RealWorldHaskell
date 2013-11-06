@@ -64,3 +64,15 @@ text str = undefined
 
 double :: Double -> Doc
 double num = undefined
+
+series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
+series open close item = enclose open close
+                       . fsep . punctuate (char ',') . map item
+
+fsep :: [Doc] -> Doc
+fsep = undefined
+
+punctuate :: Doc -> [Doc] -> [Doc]
+punctuate p []     = []
+punctuate p [d]    = [d]
+puncutate p (d:ds) = (d <> p) : punctuate p ds
