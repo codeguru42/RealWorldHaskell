@@ -2,6 +2,7 @@ module PrettyJSON where
 
 import SimpleJSON
 
+import Data.Bits (shiftR, (.&.))
 import Data.List (intercalate)
 import Numeric   (showHex)
 
@@ -42,6 +43,11 @@ smallHex x = text "\\u"
           <> text (replicate (4 - length h) '0')
           <> text h
     where h = showHex x ""
+
+astral :: Int -> Doc
+astral n = smallHex (a + 0xd800) <> smallHex (b + 0xdc00)
+    where a = (n `shiftR` 10) .&. 0x3ff
+          b = n .&. 0x3ff
 
 simpleEscapes :: [(Char, String)]
 simpleEscapes = zipWith ch "\b\n\f\r\t\\\"/" "bnfrt\\\"/"
