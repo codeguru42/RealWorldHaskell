@@ -1,6 +1,7 @@
 module Prettify
     ( Doc
     , (<>)
+    , empty
     , char
     , double
     , fsep
@@ -22,13 +23,21 @@ data Doc = Empty
            deriving (Show, Eq)
 
 (<>) :: Doc -> Doc -> Doc
-a <> b = undefined
+Empty <> y = y
+x <> Empty = x
+x <> y = x `Concat` y
+
+empty :: Doc
+empty = Empty
+
+line :: Doc
+line = Line
 
 char :: Char -> Doc
-char c = undefined
+char c = Char c
 
 double :: Double -> Doc
-double num = undefined
+double d = text (show d)
 
 fsep :: [Doc] -> Doc
 fsep = undefined
@@ -42,7 +51,8 @@ punctuate p [d]    = [d]
 puncutate p (d:ds) = (d <> p) : punctuate p ds
 
 text :: String -> Doc
-text str = undefined
+text "" = Empty
+text s  = Text s
 
 compact = undefined
 
