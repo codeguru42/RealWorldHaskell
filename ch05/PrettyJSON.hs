@@ -1,11 +1,14 @@
-module PrettyJSON where
-
-import SimpleJSON
+module PrettyJSON
+    ( renderJValue
+    ) where
 
 import Data.Bits (shiftR, (.&.))
 import Data.Char (ord)
-import Data.List (intercalate)
 import Numeric   (showHex)
+
+import SimpleJSON (JValue(..))
+import Prettify (Doc, (<>), char, double, fsep, hcat, punctuate, text
+                ,compact, pretty)
 
 renderJValue :: JValue -> Doc
 renderJValue (JBool True)  = text "true"
@@ -19,15 +22,6 @@ renderJValue (JObject obj) = series '{' '}' field obj
                            <> text ": "
                            <> renderJValue val
 
-data Doc = ToBeDefined
-    deriving (Show)
-
-(<>) :: Doc -> Doc -> Doc
-a <> b = undefined
-
-hcat :: [Doc] -> Doc
-hcat xs = undefined
-
 string :: String -> Doc
 string = enclose '"' '"' . hcat . map oneChar
 
@@ -40,9 +34,6 @@ oneChar c = case lookup c simpleEscapes of
     Nothing | mustEscape c -> hexEscape c
             | otherwise    -> char c
     where mustEscape c = c < ' ' || c == '\x7f' || c > '\xff'
-
-char :: Char -> Doc
-char c = undefined
 
 smallHex :: Int -> Doc
 smallHex x = text "\\u"
@@ -64,20 +55,6 @@ hexEscape c | d < 0x10000 = smallHex d
             | otherwise   = astral (d - 0x10000)
     where d = ord c
 
-text :: String -> Doc
-text str = undefined
-
-double :: Double -> Doc
-double num = undefined
-
 series :: Char -> Char -> (a -> Doc) -> [a] -> Doc
 series open close item = enclose open close
                        . fsep . punctuate (char ',') . map item
-
-fsep :: [Doc] -> Doc
-fsep = undefined
-
-punctuate :: Doc -> [Doc] -> [Doc]
-punctuate p []     = []
-punctuate p [d]    = [d]
-puncutate p (d:ds) = (d <> p) : punctuate p ds
