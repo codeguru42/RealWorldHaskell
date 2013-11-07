@@ -13,8 +13,13 @@ module Prettify
 
 import Data.List (intercalate)
 
-data Doc = ToBeDefined
-    deriving (Show)
+data Doc = Empty
+         | Char Char
+         | Text String
+         | Line
+         | Concat Doc Doc
+         | Union Doc Doc
+           deriving (Show, Eq)
 
 (<>) :: Doc -> Doc -> Doc
 a <> b = undefined
