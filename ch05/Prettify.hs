@@ -43,7 +43,10 @@ fsep :: [Doc] -> Doc
 fsep = undefined
 
 hcat :: [Doc] -> Doc
-hcat xs = undefined
+hcat = fold (<>)
+
+fold :: (Doc -> Doc -> Doc) -> [Doc] -> Doc
+fold f = foldr f empty
 
 punctuate :: Doc -> [Doc] -> [Doc]
 punctuate p []     = []
