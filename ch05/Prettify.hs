@@ -40,7 +40,22 @@ double :: Double -> Doc
 double d = text (show d)
 
 fsep :: [Doc] -> Doc
-fsep = undefined
+fsep = fold (</>)
+
+(</>) :: Doc -> Doc -> Doc
+x </> y = x <> softline <> y
+
+softline :: Doc
+softline = group line
+
+group :: Doc -> Doc
+group x = flatten x `Union` x
+
+flatten :: Doc -> Doc
+flatten (x `Concat` y) = flatten x `Concat` flatten y
+flatten Line           = Char ' '
+flatten (x `Union` _)  = flatten x
+flatten other          = other
 
 hcat :: [Doc] -> Doc
 hcat = fold (<>)
