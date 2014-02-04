@@ -10,6 +10,10 @@ newtype Parse a = Parse {
     runParse :: ParseState -> Either String (a, ParseState)
 }
 
+modifyOffset :: ParseState -> Int64 -> ParseState
+modifyOffset initState newOffset =
+    initState { offset = newOffset}
+
 identity :: a -> Parse a
 identity a = Parse (\s -> Right (a, s))
 
